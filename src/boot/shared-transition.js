@@ -65,8 +65,6 @@ export default ({ app, router, store, Vue }) => {
 
             document.body.removeChild(clone);
           };
-
-          break;
         }
       }
 
