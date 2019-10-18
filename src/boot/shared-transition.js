@@ -5,7 +5,10 @@ export default ({ app, router, store, Vue }) => {
     for (let element of document.querySelectorAll("[data-flip-id]")) {
       map.set(
         element.getAttribute("data-flip-id"),
-        element.getBoundingClientRect()
+        {
+          el: element,
+          rect: element.getBoundingClientRect()
+        }
       );
     }
 
@@ -15,19 +18,30 @@ export default ({ app, router, store, Vue }) => {
   router.afterEach(() => {
     Vue.nextTick(() => {
       for (let el of document.querySelectorAll("[data-flip-id]")) {
-        let first = map.get(el.getAttribute("data-flip-id"));
+        let { el: otherEl, rect: first } = map.get(el.getAttribute("data-flip-id"));
 
-        if (first) {
+        if (first && el != otherEl) {
           let last = el.getBoundingClientRect();
+
+          let clone = el.cloneNode();
+
+          clone.style.position = "absolute";
+          clone.style.top = last.top + 'px';
+          clone.style.left = last.left + 'px';
+          clone.style.width = last.width + 'px';
+          clone.style.height = last.height + 'px';
+
+          document.body.appendChild(clone);
+
+          el.style.visibility = "hidden";
+
 
           const deltaX = first.left - last.left;
           const deltaY = first.top - last.top;
           const deltaW = first.width / last.width;
           const deltaH = first.height / last.height;
-          el.style.zIndex = "9999";
-          el.style.position = "relative";
-          
-          el.animate(
+
+          clone.animate(
             [
               {
                 transformOrigin: "top left",
@@ -46,7 +60,13 @@ export default ({ app, router, store, Vue }) => {
               easing: "linear",
               fill: "both"
             }
-          );
+          ).onfinish  = () => {
+            el.style.visibility = "visible";
+
+            document.body.removeChild(clone);
+          };
+
+          break;
         }
       }
 
