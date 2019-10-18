@@ -4,7 +4,9 @@
       <div class="col-6" v-for="product in products" :key="product" @click="click(product)">
         <img :src="product" :data-flip-id="product" />
       </div>
-      <router-view />
+      <transition name="background">
+        <router-view />
+      </transition>
     </div>
   </q-page>
 </template>

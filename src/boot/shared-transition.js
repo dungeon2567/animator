@@ -34,6 +34,7 @@ export default ({ app, router, store, Vue }) => {
           document.body.appendChild(clone);
 
           el.style.visibility = "hidden";
+          otherEl.style.visibility = "hidden";
 
 
           const deltaX = first.left - last.left;
@@ -56,12 +57,13 @@ export default ({ app, router, store, Vue }) => {
               }
             ],
             {
-              duration: 300,
+              duration: 500,
               easing: "linear",
               fill: "both"
             }
           ).onfinish  = () => {
             el.style.visibility = "visible";
+            otherEl.style.visibility = "visible";
 
             document.body.removeChild(clone);
           };
