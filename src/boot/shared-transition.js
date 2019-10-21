@@ -62,10 +62,10 @@ export default ({ app, router, store, Vue }) => {
               fill: "both"
             }
           ).onfinish  = () => {
-            el.style.visibility = "visible";
-            otherEl.style.visibility = "visible";
-
             document.body.removeChild(clone);
+            
+            el.style.visibility = "visible";
+            otherEl.style.visibility = "visible"
           };
         }
       }
