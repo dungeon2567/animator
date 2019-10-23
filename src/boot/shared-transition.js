@@ -17,56 +17,63 @@ export default ({ app, router, store, Vue }) => {
 
   router.afterEach(() => {
     Vue.nextTick(() => {
+
       for (let el of document.querySelectorAll("[data-flip-id]")) {
-        let { el: otherEl, rect: first } = map.get(el.getAttribute("data-flip-id"));
+        let result = map.get(el.getAttribute("data-flip-id"));
 
-        if (first && el != otherEl) {
-          let last = el.getBoundingClientRect();
+        if (result) {
 
-          let clone = el.cloneNode();
+          let { el: otherEl, rect: first } = result;
 
-          clone.style.position = "absolute";
-          clone.style.top = last.top + 'px';
-          clone.style.left = last.left + 'px';
-          clone.style.width = last.width + 'px';
-          clone.style.height = last.height + 'px';
-
-          document.body.appendChild(clone);
-
-          el.style.visibility = "hidden";
-          otherEl.style.visibility = "hidden";
+          if (first && el != otherEl) {
 
 
-          const deltaX = first.left - last.left;
-          const deltaY = first.top - last.top;
-          const deltaW = first.width / last.width;
-          const deltaH = first.height / last.height;
+            let last = el.getBoundingClientRect();
 
-          clone.animate(
-            [
-              {
-                transformOrigin: "top left",
-                transform: `
+            let clone = el.cloneNode();
+
+            clone.style.position = "absolute";
+            clone.style.top = last.top + 'px';
+            clone.style.left = last.left + 'px';
+            clone.style.width = last.width + 'px';
+            clone.style.height = last.height + 'px';
+
+            document.body.appendChild(clone);
+
+            el.style.visibility = "hidden";
+            otherEl.style.visibility = "hidden";
+
+
+            const deltaX = first.left - last.left;
+            const deltaY = first.top - last.top;
+            const deltaW = first.width / last.width;
+            const deltaH = first.height / last.height;
+
+            clone.animate(
+              [
+                {
+                  transformOrigin: "top left",
+                  transform: `
     translate(${deltaX}px, ${deltaY}px)
     scale(${deltaW}, ${deltaH})
   `
-              },
+                },
+                {
+                  transformOrigin: "top left",
+                  transform: "none"
+                }
+              ],
               {
-                transformOrigin: "top left",
-                transform: "none"
+                duration: 300,
+                easing: "linear",
+                fill: "both"
               }
-            ],
-            {
-              duration: 500,
-              easing: "linear",
-              fill: "both"
-            }
-          ).onfinish  = () => {
-            document.body.removeChild(clone);
-            
-            el.style.visibility = "visible";
-            otherEl.style.visibility = "visible"
-          };
+            ).onfinish = () => {
+              document.body.removeChild(clone);
+
+              el.style.visibility = "visible";
+            };
+          }
         }
       }
 

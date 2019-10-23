@@ -7,16 +7,14 @@ const routes = [
         path: "",
         component: () => import("pages/Index.vue"),
         name: "main",
-        children: [
-          {
-            path: "/product/:url",
-            name: "product",
-            component: () => import("pages/Product.vue"),
-            props: true
-          }
-        ]
+      },
+      {
+        path: "/product/:url",
+        name: "product",
+        component: () => import("pages/Product.vue"),
+        props: true
       }
-    ]
+    ],
   }
 ];
 
