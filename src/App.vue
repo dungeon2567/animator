@@ -1,13 +1,15 @@
 <template>
   <div id="q-app">
     <transition
-      name="fade"
       enter-active-class="animated fadeIn"
       leave-active-class="animated fadeOut"
-      :duration="300"
+      :duration="30000"
+       name="transitions"
       mode="out-in"
     >
-      <router-view />
+      <keep-alive>
+        <router-view />
+      </keep-alive>
     </transition>
   </div>
 </template>

@@ -37,7 +37,7 @@ export default {
 }
 
 .fade-in {
-  animation-delay: 300ms;
+  animation-delay: 150ms;
   animation-duration: 300ms;
   animation-name: fadein;
   animation-fill-mode: both;
